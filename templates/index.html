@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Steganography Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <h1>🔒 Image Steganography Tool</h1>
+    <p class="subtitle">Hide a secret text message inside a PNG image, then reveal it later.</p>
+
+    <!-- Simple tab buttons - main.js swaps which section is visible -->
+    <div class="tabs">
+        <button type="button" class="tab-btn active" onclick="showTab('encode')">Encode</button>
+        <button type="button" class="tab-btn" onclick="showTab('decode')">Decode</button>
+    </div>
+
+    <!-- ENCODE SECTION -->
+    <div id="encode-section" class="tab-section">
+        <h2>Encode a Message</h2>
+        <form id="encode-form" action="/process_encode" method="post" enctype="multipart/form-data">
+            <label for="cover_image">Cover Image (.png):</label>
+            <input type="file" id="cover_image" name="cover_image" accept=".png" required>
+
+            <label for="secret_text">Secret Message:</label>
+            <textarea id="secret_text" name="secret_text" rows="4" placeholder="Type your secret message here..." required></textarea>
+
+            <button type="submit">Encode &amp; Download</button>
+        </form>
+    </div>
+
+    <!-- DECODE SECTION -->
+    <div id="decode-section" class="tab-section hidden">
+        <h2>Decode a Message</h2>
+        <form id="decode-form" action="/process_decode" method="post" enctype="multipart/form-data">
+            <label for="encoded_image">Encoded Image (.png):</label>
+            <input type="file" id="encoded_image" name="encoded_image" accept=".png" required>
+
+            <button type="submit">Reveal Message</button>
+        </form>
+
+        {% if decoded_message %}
+        <div class="result-box">
+            <strong>Hidden message found:</strong>
+            <p>{{ decoded_message }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
