@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Media Converter - StegoVault{% endblock %}
+
+{% block content %}
+<div class="tool-wrapper">
+    <!-- HEADER -->
+    <div class="tool-header">
+        <div class="tool-title-row">
+            <div class="tool-badge converter-badge">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+                <span>Format Converter</span>
+            </div>
+            <a href="/" class="btn-back">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Back to Tools
+            </a>
+        </div>
+        <h1 class="tool-title">Media Format Converter</h1>
+        <p class="tool-subtitle">Convert media files into steganography-compatible formats (OGG / MP4 &rarr; WAV) or transform raw AVI into universally playable MP4.</p>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    {% if error_message %}
+    <div class="alert alert-error">
+        <span class="alert-icon">⚠️</span>
+        <div class="alert-content">
+            <strong>Error:</strong> {{ error_message }}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="converter-grid">
+        <!-- CONVERTER 1: OGG/MP4 -> WAV -->
+        <div class="tool-card">
+            <div class="card-inner-header">
+                <h3>Audio &rarr; WAV Converter</h3>
+                <span class="format-hint">Output: 16-bit PCM WAV (.wav)</span>
+            </div>
+            <p class="converter-desc">
+                Extracts and converts audio from <strong>OGG, MP4, MP3, M4A</strong> into uncompressed PCM WAV ready for audio steganography.
+            </p>
+
+            <form action="/converter/audio" method="post" enctype="multipart/form-data" class="stego-form">
+                <div class="drop-zone" id="conv-audio-drop-zone">
+                    <input type="file" id="audio_file" name="audio_file" accept=".ogg,.mp4,.mp3,.m4a,.flac,.wav" required class="file-input">
+                    <div class="drop-zone-content" id="conv-audio-drop-content">
+                        <div class="upload-icon audio-icon-color">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+                        </div>
+                        <p class="drop-title">Select OGG, MP4, or MP3 file</p>
+                        <p class="drop-desc">Will be converted to uncompressed WAV</p>
+                    </div>
+                    <div class="media-preview hidden" id="conv-audio-preview">
+                        <div class="audio-player-wrapper">
+                            <audio id="conv-audio-elem" controls></audio>
+                        </div>
+                        <div class="preview-meta">
+                            <span id="conv-audio-name" class="meta-name">track.ogg</span>
+                            <span id="conv-audio-size" class="meta-size">0 KB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-purple btn-submit">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+                    Convert &amp; Download WAV
+                </button>
+            </form>
+        </div>
+
+        <!-- CONVERTER 2: AVI -> MP4 -->
+        <div class="tool-card">
+            <div class="card-inner-header">
+                <h3>Video &rarr; Playable MP4 Converter</h3>
+                <span class="format-hint">Output: Universal H.264 MP4 (.mp4)</span>
+            </div>
+            <p class="converter-desc">
+                Transcodes unplayable or raw <strong>AVI, MKV, MOV</strong> videos into standard MP4 files that play smoothly in Windows Media Player, browsers, and phones.
+            </p>
+
+            <form action="/converter/video" method="post" enctype="multipart/form-data" class="stego-form">
+                <div class="drop-zone" id="conv-video-drop-zone">
+                    <input type="file" id="video_file" name="video_file" accept=".avi,.mkv,.mov,.webm,.flv,.wmv,.mp4" required class="file-input">
+                    <div class="drop-zone-content" id="conv-video-drop-content">
+                        <div class="upload-icon video-icon-color">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
+                        </div>
+                        <p class="drop-title">Select AVI, MKV, or MOV video</p>
+                        <p class="drop-desc">Will be converted to standard playable MP4</p>
+                    </div>
+                    <div class="media-preview hidden" id="conv-video-preview">
+                        <div class="video-player-wrapper">
+                            <video id="conv-video-elem" controls playsinline></video>
+                        </div>
+                        <div class="preview-meta">
+                            <span id="conv-video-name" class="meta-name">video.avi</span>
+                            <span id="conv-video-size" class="meta-size">0 KB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-emerald btn-submit">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+                    Convert &amp; Download MP4
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

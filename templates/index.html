@@ -1,53 +1,172 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Image Steganography Tool</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>🔒 Image Steganography Tool</h1>
-    <p class="subtitle">Hide a secret text message inside a PNG image, then reveal it later.</p>
+{% block title %}StegoVault - Select Steganography Tool{% endblock %}
 
-    <!-- Simple tab buttons - main.js swaps which section is visible -->
-    <div class="tabs">
-        <button type="button" class="tab-btn active" onclick="showTab('encode')">Encode</button>
-        <button type="button" class="tab-btn" onclick="showTab('decode')">Decode</button>
+{% block content %}
+<div class="hub-container">
+    <div class="hero-section">
+        <div class="badge-pill">🛡️ Advanced Information Hiding</div>
+        <h1 class="hero-title">Select Your Steganography Medium</h1>
+        <p class="hero-subtitle">
+            Conceal confidential messages within Images, Audio waveforms, or Video streams. Choose a dedicated engine below to start encoding or decoding.
+        </p>
     </div>
 
-    <!-- ENCODE SECTION -->
-    <div id="encode-section" class="tab-section">
-        <h2>Encode a Message</h2>
-        <form id="encode-form" action="/process_encode" method="post" enctype="multipart/form-data">
-            <label for="cover_image">Cover Image (.png):</label>
-            <input type="file" id="cover_image" name="cover_image" accept=".png" required>
-
-            <label for="secret_text">Secret Message:</label>
-            <textarea id="secret_text" name="secret_text" rows="4" placeholder="Type your secret message here..." required></textarea>
-
-            <button type="submit">Encode &amp; Download</button>
-        </form>
-    </div>
-
-    <!-- DECODE SECTION -->
-    <div id="decode-section" class="tab-section hidden">
-        <h2>Decode a Message</h2>
-        <form id="decode-form" action="/process_decode" method="post" enctype="multipart/form-data">
-            <label for="encoded_image">Encoded Image (.png):</label>
-            <input type="file" id="encoded_image" name="encoded_image" accept=".png" required>
-
-            <button type="submit">Reveal Message</button>
-        </form>
-
-        {% if decoded_message %}
-        <div class="result-box">
-            <strong>Hidden message found:</strong>
-            <p>{{ decoded_message }}</p>
+    <div class="medium-grid">
+        <!-- IMAGE STEGANOGRAPHY CARD -->
+        <div class="medium-card" id="card-image">
+            <div class="card-header">
+                <div class="card-icon-wrapper img-gradient">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                </div>
+                <div class="card-tags">
+                    <span class="tag tag-blue">Image</span>
+                    <span class="tag tag-sub">RGB LSB</span>
+                </div>
+            </div>
+            <h2 class="card-title">Image Steganography</h2>
+            <p class="card-desc">
+                Embed secret text directly into the least significant bits of RGB pixel channels in digital photos without visual degradation.
+            </p>
+            <div class="card-specs">
+                <div class="spec-item">
+                    <span class="spec-label">Input Formats:</span>
+                    <span class="spec-val">PNG, JPG, JPEG, WEBP</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Output Format:</span>
+                    <span class="spec-val">Lossless PNG (.png)</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Speed &amp; Capacity:</span>
+                    <span class="spec-val">Instant / ~3 bits per pixel</span>
+                </div>
+            </div>
+            <div class="card-action">
+                <a href="/image" class="btn btn-primary btn-block">
+                    Launch Image Tool
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
+            </div>
         </div>
-        {% endif %}
+
+        <!-- AUDIO STEGANOGRAPHY CARD -->
+        <div class="medium-card" id="card-audio">
+            <div class="card-header">
+                <div class="card-icon-wrapper audio-gradient">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+                </div>
+                <div class="card-tags">
+                    <span class="tag tag-purple">Audio</span>
+                    <span class="tag tag-sub">PCM Wave</span>
+                </div>
+            </div>
+            <h2 class="card-title">Audio Steganography</h2>
+            <p class="card-desc">
+                Conceal confidential messages within audio waveforms. Supports direct upload of WAV, OGG, MP4, or MP3 with automatic uncompressed conversion.
+            </p>
+            <div class="card-specs">
+                <div class="spec-item">
+                    <span class="spec-label">Input Formats:</span>
+                    <span class="spec-val">WAV, OGG, MP4, MP3</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Output Format:</span>
+                    <span class="spec-val">Lossless WAV (.wav)</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Speed &amp; Capacity:</span>
+                    <span class="spec-val">High Speed / ~44k bits/sec</span>
+                </div>
+            </div>
+            <div class="card-action">
+                <a href="/audio" class="btn btn-purple btn-block">
+                    Launch Audio Tool
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- VIDEO STEGANOGRAPHY CARD -->
+        <div class="medium-card" id="card-video">
+            <div class="card-header">
+                <div class="card-icon-wrapper video-gradient">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
+                </div>
+                <div class="card-tags">
+                    <span class="tag tag-emerald">Video</span>
+                    <span class="tag tag-sub">100% Playable</span>
+                </div>
+            </div>
+            <h2 class="card-title">Video Steganography</h2>
+            <p class="card-desc">
+                Conceal secret messages inside standard MP4 videos. The encoded video plays smoothly in Windows Media Player, browsers, and mobile devices without suspicion.
+            </p>
+            <div class="card-specs">
+                <div class="spec-item">
+                    <span class="spec-label">Input Formats:</span>
+                    <span class="spec-val">MP4, AVI, MOV, MKV, WEBM</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Output Format:</span>
+                    <span class="spec-val">Standard Playable MP4 (.mp4)</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">Playback:</span>
+                    <span class="spec-val">100% Compatible everywhere</span>
+                </div>
+            </div>
+            <div class="card-action">
+                <a href="/video" class="btn btn-emerald btn-block">
+                    Launch Video Tool
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
+            </div>
+        </div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-</body>
-</html>
+    <!-- CONVERTER BANNER -->
+    <div class="converter-banner">
+        <div class="banner-content">
+            <div class="banner-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+            </div>
+            <div class="banner-text">
+                <h3>Need to convert media formats?</h3>
+                <p>Convert <strong>OGG / MP4 &rarr; WAV</strong> for acoustic steganography, or transcode <strong>AVI &rarr; Playable MP4</strong> for universal playback.</p>
+            </div>
+        </div>
+        <a href="/converter" class="btn btn-primary">
+            Open Converter Tool
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+    </div>
+
+    <!-- HOW IT WORKS SECTION -->
+    <div class="info-section">
+        <h3 class="section-title">How Multi-Media LSB Steganography Works</h3>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-num">01</div>
+                <h4>Binary Encoding</h4>
+                <p>Your secret message is converted to UTF-8 binary bitstrings with a secure termination delimiter attached.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">02</div>
+                <h4>LSB Substitution</h4>
+                <p>The Least Significant Bit of each sample/pixel is replaced with a payload bit. The difference is mathematically tiny.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">03</div>
+                <h4>Lossless Preservation</h4>
+                <p>Saved in lossless container formats (PNG, WAV, FFV1 AVI) so lossy codecs never compress away your hidden data.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">04</div>
+                <h4>High-Speed Recovery</h4>
+                <p>Our extraction algorithms rapidly stream bits and instantly reconstruct the original text upon delimiter discovery.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
