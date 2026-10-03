@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+uploads/
+*.wav_temp_converted.wav
+*.mp4_playable_temp.mp4

@@ -76,3 +76,27 @@ http://localhost:5000/
 | `/converter` | `GET` | Media Format Converter Tool |
 | `/converter/audio` | `POST` | Converts OGG / MP4 / MP3 to uncompressed `.wav` |
 | `/converter/video` | `POST` | Converts AVI / MKV / MOV to standard playable `.mp4` |
+
+---
+
+## 📁 Modular Project Architecture
+
+The project has been separated into clean, modular, and single-responsibility Python files:
+
+| File | Description |
+|---|---|
+| `app.py` | Flask application factory and server startup |
+| `config.py` | Application settings, folder paths, allowed extensions, and delimiters |
+| `utils.py` | Helper utilities for file validation, unique naming, and temp cleanup |
+| `image_stego.py` | Core `ImageStegoEngine` implementing RGB LSB steganography |
+| `audio_stego.py` | Core `AudioStegoEngine` implementing PCM WAV audio LSB steganography |
+| `video_stego.py` | Core `VideoStegoEngine` implementing MP4 steganography & legacy AVI LSB fallback |
+| `media_converter.py` | FFmpeg wrapper for audio-to-WAV and video-to-MP4 transcoding |
+| `stego_engine.py` | Backward-compatible facade re-exporting all engines |
+| `image_routes.py` | Flask Blueprint handling image encode, decode, and preview routes |
+| `audio_routes.py` | Flask Blueprint handling audio encode and decode routes |
+| `video_routes.py` | Flask Blueprint handling video encode and decode routes |
+| `converter_routes.py` | Flask Blueprint handling media conversion routes |
+| `main_routes.py` | Flask Blueprint handling central landing hub |
+| `cli.py` | Lightweight command-line interface for encoding & decoding in terminal |
+| `requirements.txt` | Core package dependencies |
